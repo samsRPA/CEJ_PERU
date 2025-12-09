@@ -1,0 +1,12 @@
+
+requests==2.32.3
+dependency-injector==4.45.0
+pydantic-settings==2.6.1
+
+aio-pika==9.5.6
+fastapi==0.115.12
+uvicorn==0.34.2
+
+pandas
+openpyxl
+oracledb==2.5.1

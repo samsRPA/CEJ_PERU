@@ -1,0 +1,130 @@
+
+
+networks:
+  vpn_net:
+    driver: bridge
+
+# ===== ANCLA COMÚN VPN =====
+x-vpn-common: &vpn-common
+  image: qmcgaw/gluetun:latest
+  cap_add:
+    - NET_ADMIN
+  devices:
+    - /dev/net/tun:/dev/net/tun
+  restart: unless-stopped
+  networks:
+    - vpn_net
+  environment:
+    - VPN_SERVICE_PROVIDER=private internet access
+    - VPN_TYPE=openvpn
+    - OPENVPN_PROTOCOL=tcp
+    - OPENVPN_ENCRYPTION=strong
+    - OPENVPN_USER=p3608474
+    - OPENVPN_PASSWORD=rjQFeA3AYi
+    - SERVER_HOSTNAMES="ca-montreal.privacy.network"
+    - FIREWALL=off
+    - DNS_ADDRESS=8.8.8.8
+    - LOG_LEVEL=info
+    - HEALTHCHECK_LOG=on
+    - OPENVPN_ENDPOINT_PORT=443
+    - HEALTH_VPN_DURATION_INITIAL=120s
+    - HEALTH_VPN_DURATION=5m
+    - HTTPPROXY=on
+    - HTTPPROXY_LOG=off
+    - DOT=off
+    - UPDATER_PERIOD=24h
+    - VERSION_CHECK=false
+    - TZ=America/Bogota
+  mem_limit: 512m
+  mem_reservation: 256m
+  cpus: 0.5
+  cpu_shares: 128
+  healthcheck:
+    test: ["CMD", "wget", "-q", "-O-", "http://ifconfig.me"]
+    interval: 30s
+    timeout: 10s
+    retries: 3
+    start_period: 60s
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "3"
+  extra_hosts:
+    - "host.docker.internal:host-gateway"
+
+services:
+
+  vpn_00:
+    <<: *vpn-common
+    container_name: vpn_00
+
+  # vpn_01:
+  #   <<: *vpn-common
+  #   container_name: vpn_01
+
+  # vpn_02:
+  #   <<: *vpn-common
+  #   container_name: vpn_02
+
+  worker_01:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cej-worker-01
+    network_mode: "container:vpn_00"
+    depends_on:
+      vpn_00:
+        condition: service_healthy
+    environment:
+      DISPLAY_NUM: 90
+      RESOLUTION: 1920x1080x24
+    volumes:
+      - ./output:/app/output
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # worker_02:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: cej-worker-02
+  #   network_mode: "container:vpn_01"
+  #   depends_on:
+  #     vpn_01:
+  #       condition: service_healthy
+  #   environment:
+  #     DISPLAY_NUM: 91
+  #     RESOLUTION: 1920x1080x24
+  #   volumes:
+  #     - ./logs/worker_02:/app/logs
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
+
+  # worker_03:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: cej-worker-03
+  #   network_mode: "container:vpn_02"
+  #   depends_on:
+  #     vpn_02:
+  #       condition: service_healthy
+  #   environment:
+  #     DISPLAY_NUM: 92
+  #     RESOLUTION: 1920x1080x24
+  #   volumes:
+  #     - ./logs/worker_03:/app/logs
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"

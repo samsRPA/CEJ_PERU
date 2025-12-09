@@ -1,0 +1,209 @@
+
+
+services:
+  rabbitmq:
+    image: rabbitmq:4.1-management
+    container_name: rabbitmqCEJPeru
+    ports:
+    - "5672:5672"
+    - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: "-rabbit consumer_timeout 1800000 -rabbit heartbeat 120"
+    networks:
+      - rabbitmq_net
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+    deploy:
+      resources:
+        limits:
+          memory: 3000m   # Máx 512 MB RAM
+  
+  ssh_tunnel_cej_peru:
+    image: alpine:latest
+    container_name: ssh_tunnel_cej_peru
+    volumes:
+      - ./stack/ssh_tunnel/bd-tunnel.sh:/bd-tunnel.sh:ro
+      - ./stack:/keys
+    command: sh /bd-tunnel.sh
+    env_file:
+      - ./stack/ssh_tunnel/.env
+    networks:
+      - rabbitmq_net
+    restart: always
+    healthcheck:
+      test: ["CMD", "sh", "-c", "netstat -tn | grep -q ESTABLISHED"]
+      interval: 25s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: 1000M
+        reservations:
+          memory: 256M
+
+  ms_watcher:
+    build:
+      context: ./ms_watcher
+      dockerfile: dockerfile
+    container_name: ms_watcher_cej_peru
+    ports:
+      - "127.0.0.1:5070:5070"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - rabbitmq_net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5070/health"]
+      interval: 2m
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    volumes:
+      - ./output:/app/output
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+    deploy:
+      resources:
+        limits:
+          memory: 1000m
+  
+  # worker_cej_peru:
+  #   build:
+  #     context: ./worker_cej_peru_playwright
+  #     dockerfile: dockerfile
+  #   environment:
+  #     DISPLAY_NUM: 90
+  #     RESOLUTION: 1920x1080x24
+  #     # Si tu app usa TZ, la puedes definir aquí:
+  #     TZ: America/Bogota
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy   
+  #   networks:
+  #     - rabbitmq_net
+  #   volumes:
+  #     - ./output:/app/output
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - /etc/timezone:/etc/timezone:ro
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "20m"
+  #       max-file: "5"
+  #   deploy:
+  #     replicas: 1
+  #     resources:
+  #       limits:
+  #         memory: 2000m
+
+  worker_cej_peru:
+    build:
+      context: ./worker_cej_peru
+      dockerfile: dockerfile
+    environment:
+      DISPLAY_NUM: 90
+      RESOLUTION: 1920x1080x24
+      # Si tu app usa TZ, la puedes definir aquí:
+      TZ: America/Bogota
+    depends_on:
+      rabbitmq:
+        condition: service_healthy   
+      ms_watcher:
+        condition: service_healthy
+    networks:
+      - rabbitmq_net
+    volumes:
+      - ./output:/app/output
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 2000m
+
+  upload_jsons:
+    build:
+      context: ./upload_jsons
+      dockerfile: dockerfile
+    networks:
+      - rabbitmq_net
+    volumes:
+      - ./output:/app/output
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+    deploy:
+      resources:
+        limits:
+          memory: 200m
+
+    #Worker que corre la app con Chrome / Selenium
+  # worker_cej_peru:
+  #   build:
+  #     context: ./worker_cej_peru
+  #     dockerfile: Dockerfile
+  #     container_name: cej-worker-01
+  
+  #   environment:
+  #     DISPLAY_NUM: 90
+  #     RESOLUTION: 1920x1080x24
+  #     # Si tu app usa TZ, la puedes definir aquí:
+  #     TZ: America/Bogota
+  #   volumes:
+  #     - ./output:/app/output
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - /etc/timezone:/etc/timezone:ro
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
+  #   networks:
+  #     - rabbitmq_net
+  #   # Opcional: límites de recursos (ajusta según tu máquina)
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 1024M
+  #         cpus: '0.50'
+
+  # Si quieres otro worker de prueba, descomenta y duplica worker_01 cambiando container_name y DISPLAY_NUM
+  # worker_02:
+  #   build: ...
+  #   environment:
+  #     DISPLAY_NUM: 91
+networks:
+  rabbitmq_net:
+    driver: bridge
+    

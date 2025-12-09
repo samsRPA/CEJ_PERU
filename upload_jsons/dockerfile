@@ -1,0 +1,24 @@
+FROM python:3.12-slim
+
+
+WORKDIR /home/app
+
+# 🔹 Evitar prompts interactivos en la instalación
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 🔹 Configurar zona horaria por defecto (Bogotá)
+ENV TZ=America/Bogota
+
+# 🔹 Copiar requirements y limpiar duplicados
+COPY requirements.txt .
+
+
+# 🔹 Instalar dependencias Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 🔹 Copiar el código al contenedor
+COPY . /home/app
+
+# Evita que corra solo al levantar
+CMD ["tail", "-f", "/dev/null"]
+

@@ -1,0 +1,22 @@
+FROM mcr.microsoft.com/playwright/python:v1.55.0-jammy
+
+# Instalar curl
+RUN apt-get update && apt-get install -y curl
+
+# Copiar la aplicación
+WORKDIR /home/app
+COPY . /home/app
+
+# Instalar dependencias Python
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip \
+ && pip install --no-cache-dir -r requirements.txt
+
+# Exponer el puerto
+EXPOSE 5070
+
+
+# Comando para ejecutar la aplicación
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5070"]
+
+# uvicorn main:app --host 0.0.0.0 --port 5070

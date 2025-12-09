@@ -1,0 +1,112 @@
+FROM python:3.10-slim
+
+############################
+# 1 · Variables básicas
+############################
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LOG_DIR=/app/logs
+ENV RESOLUTION=1920x1080x24
+
+############################
+# 2 · Dependencias del sistema
+############################
+
+# --- Dependencias para Pandoc + XeLaTeX ---
+RUN apt-get update && apt-get install -y \
+    pandoc \
+    texlive-xetex \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      wget curl gnupg ca-certificates apt-transport-https unzip \
+      fonts-liberation libnss3 libatk-bridge2.0-0 libx11-xcb1 \
+      libxcomposite1 libxdamage1 libxrandr2 libgbm1 libasound2 \
+      libgtk-3-0 libxss1 libxtst6 libxext6 libxi6 libxcursor1 \
+      libxfixes3 libxrender1 libdbus-1-3 python3-tk python3-dev \
+      xvfb xauth dos2unix sudo unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+############################
+# 3 · Google Chrome
+############################
+RUN wget -qO- https://dl.google.com/linux/linux_signing_key.pub \
+      | gpg --dearmor -o /usr/share/keyrings/chrome.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/chrome.gpg] \
+      http://dl.google.com/linux/chrome/deb/ stable main" \
+      > /etc/apt/sources.list.d/google-chrome.list && \
+    apt-get update && apt-get install -y --no-install-recommends \
+      google-chrome-stable && \
+    rm -rf /var/lib/apt/lists/*
+
+############################
+# 4 · Script para ChromeDriver compatible
+############################
+RUN printf '%s\n' \
+  '#!/bin/bash' \
+  'echo "🔍 Instalando ChromeDriver compatible..."' \
+  'CHROME_VERSION=$(google-chrome --version | grep -oP "\d+\.\d+\.\d+\.\d+")' \
+  'CHROME_MAJOR=$(echo $CHROME_VERSION | cut -d. -f1)' \
+  'echo "Chrome: $CHROME_VERSION (major: $CHROME_MAJOR)"' \
+  '' \
+  'DRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_$CHROME_MAJOR")' \
+  'echo "ChromeDriver: $DRIVER_VERSION"' \
+  '' \
+  'wget -O /tmp/chromedriver.zip "https://storage.googleapis.com/chrome-for-testing-public/$DRIVER_VERSION/linux64/chromedriver-linux64.zip"' \
+  'unzip /tmp/chromedriver.zip -d /tmp/' \
+  'mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver' \
+  'chmod +x /usr/local/bin/chromedriver' \
+  'rm -rf /tmp/chromedriver.zip /tmp/chromedriver-linux64' \
+  'echo "✅ ChromeDriver instalado correctamente"' \
+  > /usr/local/bin/install-chromedriver.sh \
+  && chmod +x /usr/local/bin/install-chromedriver.sh
+
+############################
+# 5 · Preparar Xauthority
+############################
+RUN touch /root/.Xauthority && chmod 600 /root/.Xauthority
+
+############################
+# 6 · Código Python y dependencias
+############################
+WORKDIR /app
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+COPY main.py .
+
+############################
+# 8 · Script de arranque
+############################
+RUN printf '%s\n' \
+  '#!/bin/bash' \
+  'set -e' \
+  '' \
+  '# — Instalar ChromeDriver compatible —' \
+  '/usr/local/bin/install-chromedriver.sh' \
+  '' \
+  '# — Mostrar versiones —' \
+  'echo "🔍 Versiones instaladas:"' \
+  'google-chrome --version' \
+  'chromedriver --version' \
+  '' \
+  '# — Configurar display —' \
+  'display="${DISPLAY_NUM:-99}"' \
+  'resolution="${RESOLUTION:-1920x1080x24}"' \
+  'echo "🚀 Arrancando Xvfb en :${display} con resolución ${resolution}"' \
+  '' \
+  'rm -f /tmp/.X${display}-lock /tmp/.X11-unix/X${display}' \
+  '' \
+  'Xvfb :${display} -screen 0 ${resolution} &' \
+  'XVFB_PID=$!' \
+  'export DISPLAY=:${display}' \
+  '' \
+  '# — Crear directorio para undetected-chromedriver —' \
+  'mkdir -p /root/.local/share/undetected_chromedriver' \
+  '' \
+  'exec python3 main.py' \
+  > /app/start.sh \
+  && dos2unix /app/start.sh \
+  && chmod +x /app/start.sh
+
+CMD ["/app/start.sh"]
