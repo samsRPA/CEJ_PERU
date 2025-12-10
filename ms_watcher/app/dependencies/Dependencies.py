@@ -39,9 +39,9 @@ class Dependencies(containers.DeclarativeContainer):
     )
 
   key_cej_repository= providers.Factory(
-        KeyCEJRepository,
+    KeyCEJRepository,
        
-    )
+  )
 
    
   get_data_service: providers.Factory[IGetProceedingsService] = providers.Factory(

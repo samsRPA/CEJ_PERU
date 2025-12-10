@@ -164,6 +164,7 @@ class DownloadService(IDownloadService):
                 data["fecha_registro_tyba"] = fecha_registro_tyba
 
                 resoluciones.append(data)
+               
 
                 if downloadable:
                     dataToCheck = {
@@ -206,9 +207,9 @@ class DownloadService(IDownloadService):
                 
                 
             await conn.commit()
-                        # ==========================================================
-            #   📝 GUARDAR RESOLUCIONES EN ARCHIVO GLOBAL NDJSON (SEGURO)
-            # ==========================================================
+            #             # ==========================================================
+            # #   📝 GUARDAR RESOLUCIONES EN ARCHIVO GLOBAL NDJSON (SEGURO)
+            # # ==========================================================
 
             try:
                 jsons_dir = "/app/output/jsons"

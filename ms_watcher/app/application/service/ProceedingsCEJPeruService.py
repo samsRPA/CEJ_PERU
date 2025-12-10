@@ -16,11 +16,11 @@ class ProceedingsCEJPeruService(IProceedingsCEJPeruService):
         self.getData = getData
         self.producer= producer
      
-    def getAllProceedings(self):
+    async def getAllProceedings(self):
       
         try:
             
-            raw_proceedings = self.getData.get_proceedings()
+            raw_proceedings = await self.getData.get_proceedings()
             if raw_proceedings:
                 self.logger.info(f"✅ Se extrayeron {len(raw_proceedings)} expedientes")
             return raw_proceedings
@@ -34,7 +34,7 @@ class ProceedingsCEJPeruService(IProceedingsCEJPeruService):
             try:
                     
                
-                proceedings= self.getAllProceedings()
+                proceedings= await self.getAllProceedings()
 
                 if not proceedings:
                     raise ValueError("No hay radicados para publicar")

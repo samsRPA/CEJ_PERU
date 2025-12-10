@@ -44,24 +44,24 @@ class ScrapperService(IScrapperService):
                         # ------------------------------------------------
             # 🔹 Caso 1: radicado vacío → validar TODOS los demás
             # ------------------------------------------------
-            radicado_vacio = (
-                case_information.radicado is None 
-                or str(case_information.radicado).strip() == ""
-            )
+            # radicado_vacio = (
+            #     case_information.radicado is None 
+            #     or str(case_information.radicado).strip() == ""
+            # )
 
-            if radicado_vacio:
-                campos_obligatorios = [
-                    "distrito_judicial",
-                    "instancia",
-                    "especialidad",
-                    "annio",
-                    "num_expediente",
-                ]
+            # if radicado_vacio:
+            #     campos_obligatorios = [
+            #         "distrito_judicial",
+            #         "instancia",
+            #         "especialidad",
+            #         "annio",
+            #         "num_expediente",
+            #     ]
 
-                for campo in campos_obligatorios:
-                    valor = getattr(case_information, campo)
-                    if valor is None or str(valor).strip() == "":
-                        return {"error": f"El campo '{campo}' es obligatorio cuando no hay radicado."}
+            #     for campo in campos_obligatorios:
+            #         valor = getattr(case_information, campo)
+            #         if valor is None or str(valor).strip() == "":
+            #             return {"error": f"El campo '{campo}' es obligatorio cuando no hay radicado."}
 
 
             await self.cej_scrapper.scrapper(case_information)

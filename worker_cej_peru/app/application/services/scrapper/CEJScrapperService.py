@@ -42,9 +42,9 @@ class CEJScrapperService(ICEJScrapperService):
         self.download_service=download_service
         self.logger= logging.getLogger(__name__)
         
-    CHROME_MAJOR = 141
+    CHROME_MAJOR = 143
     URL = "https://cej.pj.gob.pe/cej/forms/busquedaform.html"
-    CHROME_MAJOR = 141
+ 
     DOWNLOAD_DIR ="/app/output/descargas"
     #DOWNLOAD_DIR ="output/descargas"
         
@@ -99,7 +99,7 @@ class CEJScrapperService(ICEJScrapperService):
             annio = case_information.annio
 
             is_completed_form = self.form_scrapper.fill_out_form(wait, driver, case_information, actions)
-            conn = await self.db.acquire_connection()
+            #conn = await self.db.acquire_connection()
             
 
             if is_completed_form:

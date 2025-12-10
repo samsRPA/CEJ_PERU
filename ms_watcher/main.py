@@ -42,12 +42,15 @@ async def lifespan(app: FastAPI):
     dependency = Dependencies()
     dependency.settings.override(config)
     app.container = dependency
+    db = dependency.data_base()
 
     producer = dependency.rabbitmq_producer()
 
 
     try:
+        
         await producer.connect()
+        await db.connect()
         yield
 
     except Exception as error:

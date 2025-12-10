@@ -119,36 +119,36 @@ services:
   #       limits:
   #         memory: 2000m
 
-  worker_cej_peru:
-    build:
-      context: ./worker_cej_peru
-      dockerfile: dockerfile
-    environment:
-      DISPLAY_NUM: 90
-      RESOLUTION: 1920x1080x24
-      # Si tu app usa TZ, la puedes definir aquí:
-      TZ: America/Bogota
-    depends_on:
-      rabbitmq:
-        condition: service_healthy   
-      ms_watcher:
-        condition: service_healthy
-    networks:
-      - rabbitmq_net
-    volumes:
-      - ./output:/app/output
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "20m"
-        max-file: "5"
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          memory: 2000m
+  # worker_cej_peru:
+  #   build:
+  #     context: ./worker_cej_peru
+  #     dockerfile: dockerfile
+  #   environment:
+  #     DISPLAY_NUM: 90
+  #     RESOLUTION: 1920x1080x24
+  #     # Si tu app usa TZ, la puedes definir aquí:
+  #     TZ: America/Bogota
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy   
+  #     ms_watcher:
+  #       condition: service_healthy
+  #   networks:
+  #     - rabbitmq_net
+  #   volumes:
+  #     - ./output:/app/output
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - /etc/timezone:/etc/timezone:ro
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "20m"
+  #       max-file: "5"
+  #   deploy:
+  #     replicas: 7
+  #     resources:
+  #       limits:
+  #         memory: 2000m
 
   upload_jsons:
     build:
