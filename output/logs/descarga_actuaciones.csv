@@ -1,0 +1,63 @@
+2025-12-11 15:33:41,489 - INFO - [OracleDB] ✅ Pool de Oracle creado exitosamente.
+2025-12-11 15:34:45,719 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-11 15:34:45,720 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_PERU
+2025-12-11 15:34:46,479 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-11 15:34:46,479 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_ACTORES
+2025-12-11 15:34:46,483 - INFO - [BulkUploadService] 🧹 Carpeta jsons limpiada correctamente.
+2025-12-11 15:34:46,555 - INFO - [OracleDB] 🔌 Conexión a Oracle cerrada correctamente.
+2025-12-12 09:35:53,950 - INFO - [OracleDB] ✅ Pool de Oracle creado exitosamente.
+2025-12-12 09:36:58,002 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 09:36:58,002 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_PERU
+2025-12-12 09:36:58,406 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 09:36:58,406 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_ACTORES
+2025-12-12 09:36:58,407 - INFO - [BulkUploadService] 🧹 Carpeta jsons limpiada correctamente.
+2025-12-12 09:36:58,484 - INFO - [OracleDB] 🔌 Conexión a Oracle cerrada correctamente.
+2025-12-12 10:17:02,909 - INFO - [OracleDB] ✅ Pool de Oracle creado exitosamente.
+2025-12-12 10:18:04,223 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 10:18:04,224 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_PERU
+2025-12-12 10:18:04,680 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 10:18:04,681 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_ACTORES
+2025-12-12 10:18:04,682 - INFO - [BulkUploadService] 🧹 Carpeta jsons limpiada correctamente.
+2025-12-12 10:18:04,762 - INFO - [OracleDB] 🔌 Conexión a Oracle cerrada correctamente.
+2025-12-12 11:51:11,109 - INFO - [OracleDB] ✅ Pool de Oracle creado exitosamente.
+2025-12-12 11:52:12,990 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 11:52:12,992 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_PERU
+2025-12-12 11:52:13,324 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 11:52:13,324 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_ACTORES
+2025-12-12 11:52:13,326 - INFO - [BulkUploadService] 🧹 Carpeta jsons limpiada correctamente.
+2025-12-12 11:52:13,407 - INFO - [OracleDB] 🔌 Conexión a Oracle cerrada correctamente.
+2025-12-12 12:12:38,535 - INFO - [OracleDB] ✅ Pool de Oracle creado exitosamente.
+2025-12-12 12:13:42,457 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 12:13:42,457 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_PERU
+2025-12-12 12:13:42,779 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 12:13:42,779 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_ACTORES
+2025-12-12 12:13:42,781 - INFO - [BulkUploadService] 🧹 Carpeta jsons limpiada correctamente.
+2025-12-12 12:13:42,858 - INFO - [OracleDB] 🔌 Conexión a Oracle cerrada correctamente.
+2025-12-12 12:41:32,235 - INFO - [OracleDB] ✅ Pool de Oracle creado exitosamente.
+2025-12-12 12:40:24,741 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 12:40:24,741 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_PERU
+2025-12-12 12:40:25,069 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 12:40:25,069 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_ACTORES
+2025-12-12 12:40:25,070 - INFO - [BulkUploadService] 🧹 Carpeta jsons limpiada correctamente.
+2025-12-12 12:40:25,150 - INFO - [OracleDB] 🔌 Conexión a Oracle cerrada correctamente.
+2025-12-12 12:57:18,478 - INFO - [OracleDB] ✅ Pool de Oracle creado exitosamente.
+2025-12-12 12:58:20,272 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 12:58:20,272 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_PERU
+2025-12-12 12:58:20,608 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 12:58:20,608 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_ACTORES
+2025-12-12 12:58:20,609 - INFO - [BulkUploadService] 🧹 Carpeta jsons limpiada correctamente.
+2025-12-12 12:58:20,689 - INFO - [OracleDB] 🔌 Conexión a Oracle cerrada correctamente.
+2025-12-12 13:45:32,816 - INFO - [OracleDB] ✅ Pool de Oracle creado exitosamente.
+2025-12-12 13:46:33,369 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 13:46:33,370 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_PERU
+2025-12-12 13:46:33,678 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 13:46:33,678 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_ACTORES
+2025-12-12 13:46:33,679 - INFO - [BulkUploadService] 🧹 Carpeta jsons limpiada correctamente.
+2025-12-12 13:46:33,754 - INFO - [OracleDB] 🔌 Conexión a Oracle cerrada correctamente.
+2025-12-12 15:03:04,874 - INFO - [OracleDB] ✅ Pool de Oracle creado exitosamente.
+2025-12-12 15:04:05,666 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 15:04:05,667 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_PERU
+2025-12-12 15:04:06,018 - INFO - [CargaMasivaCJRepository] ✅ Mensaje devuelto: SUCCESS
+2025-12-12 15:04:06,018 - INFO - [BulkUploadService] ✅ Insert masivo exitoso para CEJ_ACTORES
+2025-12-12 15:04:06,019 - INFO - [BulkUploadService] 🧹 Carpeta jsons limpiada correctamente.
+2025-12-12 15:04:06,094 - INFO - [OracleDB] 🔌 Conexión a Oracle cerrada correctamente.

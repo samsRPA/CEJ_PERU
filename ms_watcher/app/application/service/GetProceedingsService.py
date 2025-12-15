@@ -28,20 +28,28 @@ class GetProceedingsService(IGetProceedingsService):
                 # row = (PROCESO_ID, INSTANCIA_RADICACION, ..., DEMANDADO)
 
                 instancia_radicacion = self._clean(row[1])
-                demandado_raw = self._clean(row[6])
+                demandado_raw = self._clean(row[5])
+                demandante_raw = self._clean(row[4])
+                
+    
 
                 # Extraer apellidos igual que en Excel
                 demandado_apellidos = self._extract_surnames(demandado_raw)
+                parte_demandante = self._extract_surnames( demandante_raw )
 
                 dto = ProceedingsDto(
-                    nombre_completo="",
+                    nombre_completo=demandado_raw ,
                     distrito_judicial="",
                     instancia="",
                     especialidad="",
                     annio="",
                     num_expediente="",
                     parte=demandado_apellidos,
-                    radicado=instancia_radicacion
+                    radicado=instancia_radicacion,
+                    demandante=demandado_apellidos,
+                    parte_demandante=parte_demandante
+    
+    
                 )
                 proceedings_list.append(dto)
                  # Guardar JSON
@@ -61,63 +69,78 @@ class GetProceedingsService(IGetProceedingsService):
             
         
         
-    def get_proceedings_by_excel(self): 
-        try: 
-            excel_path = "/app/output/base/OBLIGACIONES_ACTUALIZADO Y REVISADO MANUAL.xlsx" 
-            df = pd.read_excel(excel_path) 
+    # def get_proceedings(self): 
+    #     try: 
+    #         excel_path = "/app/output/base/REVISION_PERU4.xlsx" 
+    #         df = pd.read_excel(excel_path)
 
-            # Normalizar columnas
-            df.columns = df.columns.str.strip().str.upper() 
+    #         # Normalizar columnas
+    #         df.columns = df.columns.str.strip().str.upper()
 
-            proceedings_list = [] 
+    #         proceedings_list = []
 
-            for _, row in df.iterrows():
+    #         for _, row in df.iterrows():
 
-                distrito_judicial = self._clean(row["CIUDAD"])
-                especialidad = self._clean(row["ESPECIALIDAD"])
+    #             # Campos tolerantes a fallo → si no existe la columna, devuelve ""
+    #             distrito_judicial = self._clean(row.get("CIUDAD", ""))
+    #             especialidad = self._clean(row.get("ESPECIALIDAD", ""))
+    #             instancia = self._clean(row.get("INSTANCIA", ""))
+    #             radicado = self._clean(row.get("RADICADO LARGO", ""))
+    #             raw_name = self._clean(row.get("NOMBRE CLIENTE", ""))
+    #             raw_demandante= self._clean(row.get("DEMANDANTE", ""))
 
-                # AÑO sin .0 
-                annio_raw = row["AÑO"]
-                if pd.isna(annio_raw): 
-                    annio = "" 
-                else: 
-                    annio = str(int(float(annio_raw))) 
+    #             nombre_completo = raw_name
+    #             demandante_completo= raw_demandante
+    #             parte = self._extract_surnames(raw_name) if raw_name else ""
+    #             parte_demandante= self._extract_surnames(raw_demandante) if raw_name else ""
+                
 
-                # EXP JUDICIAL → tomar número antes del guión
-                raw_exp = self._clean(row["EXP JUDICIAL"])
-                num_expediente = raw_exp.split("-")[0].strip() if raw_exp else ""
+    #             # Año sin .0 con tolerancia
+    #             annio_raw = row.get("AÑO")
+    #             if pd.isna(annio_raw):
+    #                 annio = ""
+    #             else:
+    #                 try:
+    #                     annio = str(int(float(annio_raw)))
+    #                 except:
+    #                     annio = ""
 
-                # NOMBRE CLIENTE → EXTRAER APELLIDOS 
-                raw_name = self._clean(row["NOMBRE CLIENTE"])
-                nombre_completo = raw_name
-                parte = self._extract_surnames(raw_name)
+    #             # EXP JUDICIAL con tolerancia al fallo
+    #             raw_exp = self._clean(row.get("EXP JUDICIAL", ""))
+    #             if raw_exp and "-" in raw_exp:
+    #                 num_expediente = raw_exp.split("-")[0].strip()
+    #             else:
+    #                 num_expediente = raw_exp.strip() if raw_exp else ""
+                    
 
-                radicado = self._clean(row["RADICADO LARGO"])
-                instancia = self._clean(row["INSTANCIA"])
+    #             dto = ProceedingsDto(
+    #                 nombre_completo=nombre_completo,
+    #                 distrito_judicial=distrito_judicial,
+    #                 instancia=instancia,
+    #                 especialidad=especialidad,
+    #                 annio=annio,
+    #                 num_expediente=num_expediente,
+    #                 parte=parte,
+    #                 radicado=radicado,
+    #                 demandante=demandante_completo,
+    #                 parte_demandante=parte_demandante
+                    
+                    
+    #             )
 
-                dto = ProceedingsDto(
-                    nombre_completo=nombre_completo,
-                    distrito_judicial=distrito_judicial,
-                    instancia=instancia,
-                    especialidad=especialidad,
-                    annio=annio,
-                    num_expediente=num_expediente,
-                    parte=parte,
-                    radicado=radicado
-                )
+    #             proceedings_list.append(dto)
 
-                proceedings_list.append(dto)
+    #         # Guardar JSON
+    #         json_ready = [dto.model_dump() for dto in proceedings_list]
+    #         with open("/app/output/base/proceedings.json", "w", encoding="utf-8") as f:
+    #             json.dump(json_ready, f, ensure_ascii=False, indent=4)
 
-            # Guardar JSON
-            json_ready = [dto.model_dump() for dto in proceedings_list]
-            with open("/app/output/base/proceedings.json", "w", encoding="utf-8") as f:
-                json.dump(json_ready, f, ensure_ascii=False, indent=4)
+    #         return proceedings_list
 
-            return proceedings_list
+    #     except Exception as error:
+    #         self.logger.exception(f"Error al procesar Excel: {error}")
+    #         raise
 
-        except Exception as error: 
-            self.logger.exception(f"Error al procesar Excel: {error}") 
-            raise
 
 
     def _clean(self, value):

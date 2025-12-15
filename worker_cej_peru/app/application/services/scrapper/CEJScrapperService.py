@@ -99,7 +99,7 @@ class CEJScrapperService(ICEJScrapperService):
             annio = case_information.annio
 
             is_completed_form = self.form_scrapper.fill_out_form(wait, driver, case_information, actions)
-            #conn = await self.db.acquire_connection()
+            conn = await self.db.acquire_connection()
             
 
             if is_completed_form:
@@ -239,11 +239,6 @@ class CEJScrapperService(ICEJScrapperService):
 
 
 
-            # if is_completed_form:
-            #     #if radicado and cod_despacho_rama:
-            #     await self.download_service.extract_case_records(driver, radicado, cod_despacho_rama, conn,self.DOWNLOAD_DIR)
-            # else:
-            #     self.logger.warning("⚠️ No se pudo extraer radicado o despacho, se omite procesamiento.")
 
         except Exception as e:
             self.logger.error(f"❌ Error en scrapper: {e}", exc_info=True)

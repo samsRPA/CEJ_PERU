@@ -32,7 +32,9 @@ class ScrapperService(IScrapperService):
                 annio=self.body.annio,
                 num_expediente=self.body.num_expediente,
                 parte=self.body.parte,
-                radicado=self.body.radicado
+                radicado=self.body.radicado,
+                demandante=self.body.demandante,
+                parte_demandante=self.body.parte_demandante,
             )
 
             # Campo obligatorio sí o sí
@@ -41,9 +43,9 @@ class ScrapperService(IScrapperService):
                 return {"error": "El campo 'parte' es obligatorio."}
 
 
-                        # ------------------------------------------------
-            # 🔹 Caso 1: radicado vacío → validar TODOS los demás
-            # ------------------------------------------------
+            #             # ------------------------------------------------
+            # # 🔹 Caso 1: radicado vacío → validar TODOS los demás
+            # # ------------------------------------------------
             # radicado_vacio = (
             #     case_information.radicado is None 
             #     or str(case_information.radicado).strip() == ""
