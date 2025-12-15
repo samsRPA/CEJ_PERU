@@ -149,31 +149,31 @@ class CEJScrapperService(ICEJScrapperService):
                         # -----------------------------
                         # 3. Guardar JSON
                         # -----------------------------
-                        #json_path = "output/base/radicados_update.json"
-                        json_path = "/app/output/base/radicados_update.json"
-                        radicado_update = {
-                            "radicado": radicado,
-                            "num_exp": num_expediente,
-                            "nombre_completo":nombre_completo,
-                            "annio": annio
-                        }
+                        # #json_path = "output/base/radicados_update.json"
+                        # json_path = "/app/output/base/radicados_update.json"
+                        # radicado_update = {
+                        #     "radicado": radicado,
+                        #     "num_exp": num_expediente,
+                        #     "nombre_completo":nombre_completo,
+                        #     "annio": annio
+                        # }
 
 
-                        os.makedirs(os.path.dirname(json_path), exist_ok=True)
+                        # os.makedirs(os.path.dirname(json_path), exist_ok=True)
 
-                        if not os.path.exists(json_path):
-                            with open(json_path, "w", encoding="utf-8") as f:
-                                json.dump([radicado_update], f, indent=4, ensure_ascii=False)
-                        else:
-                            try:
-                                with open(json_path, "r", encoding="utf-8") as f:
-                                    data = json.load(f)
-                            except:
-                                data = []
+                        # if not os.path.exists(json_path):
+                        #     with open(json_path, "w", encoding="utf-8") as f:
+                        #         json.dump([radicado_update], f, indent=4, ensure_ascii=False)
+                        # else:
+                        #     try:
+                        #         with open(json_path, "r", encoding="utf-8") as f:
+                        #             data = json.load(f)
+                        #     except:
+                        #         data = []
 
-                            data.append(radicado_update)
-                            with open(json_path, "w", encoding="utf-8") as f:
-                                json.dump(data, f, indent=4, ensure_ascii=False)
+                        #     data.append(radicado_update)
+                        #     with open(json_path, "w", encoding="utf-8") as f:
+                        #         json.dump(data, f, indent=4, ensure_ascii=False)
 
                         # -----------------------------
                         # 4. Click botón del panel
@@ -227,19 +227,6 @@ class CEJScrapperService(ICEJScrapperService):
             else:
                 self.logger.warning("⚠️ No se logro llenar el formulario completo.")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         except Exception as e:
             self.logger.error(f"❌ Error en scrapper: {e}", exc_info=True)
         finally:
@@ -257,6 +244,8 @@ class CEJScrapperService(ICEJScrapperService):
                     await self.db.release_connection(conn)
                 except Exception as e:
                     self.logger.warning(f"Error liberando conexión DB: {e}")
+
+
 
 
 
@@ -291,22 +280,6 @@ class CEJScrapperService(ICEJScrapperService):
 
                 # Reordenar columnas
                 df = df[["RADICADO_RAMA", "TIPO_SUJETO", "NOMBRE_ACTOR", "ORIGEN_DATOS"]]
-
-        # # --- ✨ CREAR JSON INDIVIDUAL POR RADICADO ✨ ---
-
-        #         # Ruta final: /app/output/jsons/sujetos/<radicado>.json
-        #         carpeta = "/app/output/jsons/"
-        #         os.makedirs(carpeta, exist_ok=True)
-
-
-        #         # Guardar JSON directo
-        #         with open(output_path, "w", encoding="utf-8") as f:
-        #             json.dump(df.to_dict(orient="records"), f, ensure_ascii=False, indent=4)
-
-        #         self.logger.info(f"✅ JSON creado: {output_path}")
-                # ==========================================================
-                #   📝 GUARDAR SUJETOS EN ARCHIVO GLOBAL NDJSON (SEGURO)
-                # ==========================================================
 
                 try:
                     carpeta = "/app/output/jsons"

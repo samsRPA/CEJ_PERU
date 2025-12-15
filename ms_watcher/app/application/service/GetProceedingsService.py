@@ -54,9 +54,9 @@ class GetProceedingsService(IGetProceedingsService):
                 proceedings_list.append(dto)
                  # Guardar JSON
                  
-            json_ready = [dto.model_dump() for dto in proceedings_list]
-            with open("/app/output/base/proceedings.json", "w", encoding="utf-8") as f:
-                json.dump(json_ready, f, ensure_ascii=False, indent=4)
+            # json_ready = [dto.model_dump() for dto in proceedings_list]
+            # with open("/app/output/base/proceedings.json", "w", encoding="utf-8") as f:
+            #     json.dump(json_ready, f, ensure_ascii=False, indent=4)
 
             return proceedings_list
 

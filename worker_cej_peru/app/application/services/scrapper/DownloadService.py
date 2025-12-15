@@ -228,52 +228,18 @@ class DownloadService(IDownloadService):
             except Exception as e:
                 self.logger.error(f"❌ Error guardando NDJSON: {e}")
 
-            # --- Guardar datos en JSON ---
-    #--- Guardar datos en JSON ---
-           # json_path = os.path.join("/app/output/jsons", "actuaciones.json")
-            # #json_path = os.path.join("output/jsons", "actuaciones.json")
-            # # Si el archivo existe, cargar datos previos
-            # if os.path.exists(json_path):
-            #     with open(json_path, "r", encoding="utf-8") as f:
-            #         try:
-            #             existing_data = json.load(f)
-            #             if not isinstance(existing_data, list):
-            #                 existing_data = []
-            #         except json.JSONDecodeError:
-            #             existing_data = []
-            # else:
-            #     existing_data = []
-
-            # # Agregar los nuevos datos
-            # existing_data.extend(resoluciones)  # resoluciones es tu lista nueva
-
-            # # Guardar todo de nuevo
-            # with open(json_path, "w", encoding="utf-8") as f:
-            #     json.dump(existing_data, f, indent=4, ensure_ascii=False)
-
-           
-        #     carpeta = "/app/output/jsons/actuaciones"
-        #     os.makedirs(carpeta, exist_ok=True)
-
-        #     output_path = f"{carpeta}/{radicado}.json"
-
-        #         # Guardar JSON directo
-        #     with open(output_path, "w", encoding="utf-8") as f:
-        #         json.dump(resoluciones, f, ensure_ascii=False, indent=4)
-
-        #     self.logger.info(f"✅ JSON creado: {output_path}")
-
-        #    # self.logger.info(f"📁 JSON guardado en: {json_path}")
-        #     return resoluciones
         except Exception as e:
             self.logger.error(f"Error : {e}")
         finally:
+            time.sleep(10)
             # 🔚 Limpieza final de la carpeta temporal
             if os.path.exists(temp_dir) and temp_dir:
                 shutil.rmtree(temp_dir, ignore_errors=True)
                 self.logger.info(f"🧹 Carpeta temporal eliminada al finalizar: {temp_dir}")
 
         return resoluciones
+
+
 
     async def _download_records(self, bloque, driver, fecha_formateada, radicado, data, consecutivo, temp_dir, consecutive_map):
         """

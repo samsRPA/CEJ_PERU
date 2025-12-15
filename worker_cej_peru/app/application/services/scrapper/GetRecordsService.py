@@ -1,7 +1,6 @@
-import json
-import os
+
 import time
-import re
+
 import logging
 import pandas as pd
 from selenium.webdriver.common.by import By
@@ -203,70 +202,7 @@ class GetRecordsService(IGetRecordsService):
         except Exception as e:
             self.logger.error(f"⚠️ ERROR en get_records_by_Filters: {e}")
 
-    # def get_actors(self,wait, radicado):
-    #     try:
-    #         # Esperar el elemento con las partes
-    #         parte_element = wait.until(
-    #             EC.visibility_of_element_located((By.CSS_SELECTOR, "div.partesp"))
-    #         )
-    #         texto = parte_element.text.strip()
 
-    #         # Extraer los bloques de texto (DEMANDANTE / DEMANDADO)
-    #         patrones = re.findall(r"(DEMANDANTE|DEMANDADO):\s*([^:]+?)(?=(?:DEMANDANTE|DEMANDADO|$))", texto)
-
-    #         # Convertir a DataFrame directamente
-    #         df = pd.DataFrame(patrones, columns=["TIPO_SUJETO", "NOMBRE_ACTOR"])
-
-    #         # Limpiar texto y separar demandados múltiples por coma
-    #         df["NOMBRE_ACTOR"] = df["NOMBRE_ACTOR"].str.replace(r"\.$", "", regex=True)
-    #         df = df.assign(NOMBRE_ACTOR=df["NOMBRE_ACTOR"].str.split(","))
-
-    #         # Expandir los nombres separados por coma (sin usar for)
-    #         df = df.explode("NOMBRE_ACTOR").reset_index(drop=True)
-    #         df["NOMBRE_ACTOR"] = df["NOMBRE_ACTOR"].str.strip()
-
-    #         # Reemplazar DEMANDANTE por ACTOR
-    #         df["TIPO_SUJETO"] = df["TIPO_SUJETO"].replace({"DEMANDANTE": "ACTOR"})
-
-    #         # Agregar columnas fijas
-    #         df["RADICADO_RAMA"] = radicado
-    #         df["ORIGEN_DATOS"] = "CEJ_PERU"
-
-    #         # Reordenar columnas
-    #         df = df[["RADICADO_RAMA", "TIPO_SUJETO", "NOMBRE_ACTOR", "ORIGEN_DATOS"]]
-
-    #         output_path = "/app/output/jsons/sujetos.json"
-
-    #         # Convertir el DataFrame a lista de diccionarios
-    #         new_data = df.to_dict(orient="records")
-
-    #         # Si el archivo existe, cargar su contenido
-    #         if os.path.exists(output_path):
-    #             with open(output_path, "r", encoding="utf-8") as f:
-    #                 try:
-    #                     existing_data = json.load(f)
-    #                 except json.JSONDecodeError:
-    #                     existing_data = []  # En caso de JSON corrupto o vacío
-    #         else:
-    #             existing_data = []
-
-    #         # Agregar los nuevos datos al JSON existente (sin duplicar si es necesario)
-    #         existing_data.extend(new_data)
-
-    #         # Guardar el JSON actualizado
-    #         with open(output_path, "w", encoding="utf-8") as f:
-    #             json.dump(existing_data, f, ensure_ascii=False, indent=4)
-
-    #         print("✅ Datos agregados correctamente en sujetos.json")
-
-    #         return df
-
-    #     except TimeoutException:
-    #         print("⚠️ No se encontró el elemento de partes procesales.")
-    #         return pd.DataFrame()
-    #     except Exception as e:
-    #         print("❌ Error extrayendo partes procesales:", e)
-    #         return pd.DataFrame()
         
 
 

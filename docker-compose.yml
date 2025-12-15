@@ -140,6 +140,29 @@ services:
         limits:
           memory: 200m
 
+ 
+  upload_logs:
+    build:
+      context: ./upload_logs
+      dockerfile: dockerfile
+    container_name: upload_logs
+
+ 
+    networks:
+      - rabbitmq_net
+    volumes:
+      - ./output:/app/output
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+    deploy:
+      #replicas: 25
+      resources:
+        limits:
+          memory: 2000m
+
     #Worker que corre la app con Chrome / Selenium
   # worker_cej_peru:
   #   build:
